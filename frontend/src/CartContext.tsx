@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import { api } from './api'
 import type { Cart } from './api'
@@ -9,6 +10,7 @@ import type { CartContextValue } from './cart-context'
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const { pathname } = useLocation()
 
   const run = useCallback(async (action: () => Promise<Cart>) => {
     try {
@@ -24,6 +26,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     void refresh()
   }, [refresh])
+
+  useEffect(() => {
+    setError(null)
+  }, [pathname])
 
   const value = useMemo<CartContextValue>(
     () => ({

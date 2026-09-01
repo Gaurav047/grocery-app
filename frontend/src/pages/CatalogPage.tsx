@@ -5,7 +5,7 @@ import type { Category, Product } from '../api'
 import { useCart } from '../cart-context'
 
 export default function CatalogPage() {
-  const { addToCart } = useCart()
+  const { addToCart, error: cartError } = useCart()
   const [categories, setCategories] = useState<Category[]>([])
   const [products, setProducts] = useState<Product[]>([])
   const [search, setSearch] = useState('')
@@ -62,7 +62,7 @@ export default function CatalogPage() {
         </div>
       </div>
 
-      {error && <p className="error">{error}</p>}
+      {(error ?? cartError) && <p className="error">{error ?? cartError}</p>}
       {loading && <p className="muted">Loading products…</p>}
       {!loading && products.length === 0 && <p className="muted">No products match your search.</p>}
 
